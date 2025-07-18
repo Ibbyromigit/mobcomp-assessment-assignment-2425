@@ -9,13 +9,30 @@ namespace assignment_2425.Services
     public class MealService
     {
         private readonly ObservableCollection<Meal> _meals;
+        private readonly DatabaseService _databaseService;
         private static MealService _instance;
         private static readonly object _lock = new object();
 
         private MealService()
         {
             _meals = new ObservableCollection<Meal>();
-            LoadSampleData();
+            _databaseService = DatabaseService.Instance;
+            _ = InitializeAsync();
+        }
+
+        private async Task InitializeAsync()
+        {
+            try
+            {
+                await _databaseService.InitializeAsync();
+                await LoadMealsFromDatabase();
+                await _databaseService.LoadSampleDataAsync();
+                await LoadMealsFromDatabase(); // Reload after sample data
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error initializing MealService: {ex.Message}");
+            }
         }
 
         /// <summary>
@@ -47,7 +64,7 @@ namespace assignment_2425.Services
         /// </summary>
         /// <param name="meal">The meal to add</param>
         /// <returns>True if successful, false otherwise</returns>
-        public bool AddMeal(Meal meal)
+        public async Task<bool> AddMealAsync(Meal meal)
         {
             try
             {
@@ -57,15 +74,28 @@ namespace assignment_2425.Services
                 if (string.IsNullOrWhiteSpace(meal.Name))
                     return false;
 
-                _meals.Add(meal);
-                return true;
+                bool success = await _databaseService.SaveMealAsync(meal);
+                if (success)
+                {
+                    _meals.Add(meal);
+                }
+                return success;
             }
             catch (Exception ex)
             {
-                // In a real app, you would log this error
                 System.Diagnostics.Debug.WriteLine($"Error adding meal: {ex.Message}");
                 return false;
             }
+        }
+
+        /// <summary>
+        /// Add a new meal to the collection (synchronous wrapper for backward compatibility)
+        /// </summary>
+        /// <param name="meal">The meal to add</param>
+        /// <returns>True if successful, false otherwise</returns>
+        public bool AddMeal(Meal meal)
+        {
+            return AddMealAsync(meal).GetAwaiter().GetResult();
         }
 
         /// <summary>
@@ -73,23 +103,36 @@ namespace assignment_2425.Services
         /// </summary>
         /// <param name="mealId">ID of the meal to remove</param>
         /// <returns>True if successful, false otherwise</returns>
-        public bool RemoveMeal(string mealId)
+        public async Task<bool> RemoveMealAsync(string mealId)
         {
             try
             {
-                var meal = _meals.FirstOrDefault(m => m.Id == mealId);
-                if (meal != null)
+                bool success = await _databaseService.DeleteMealAsync(mealId);
+                if (success)
                 {
-                    _meals.Remove(meal);
-                    return true;
+                    var meal = _meals.FirstOrDefault(m => m.Id == mealId);
+                    if (meal != null)
+                    {
+                        _meals.Remove(meal);
+                    }
                 }
-                return false;
+                return success;
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine($"Error removing meal: {ex.Message}");
                 return false;
             }
+        }
+
+        /// <summary>
+        /// Remove a meal from the collection (synchronous wrapper for backward compatibility)
+        /// </summary>
+        /// <param name="mealId">ID of the meal to remove</param>
+        /// <returns>True if successful, false otherwise</returns>
+        public bool RemoveMeal(string mealId)
+        {
+            return RemoveMealAsync(mealId).GetAwaiter().GetResult();
         }
 
         /// <summary>
@@ -158,32 +201,51 @@ namespace assignment_2425.Services
         }
 
         /// <summary>
-        /// Load some sample data for demonstration
+        /// Load meals from database into the observable collection
         /// </summary>
-        private void LoadSampleData()
+        private async Task LoadMealsFromDatabase()
         {
-            var sampleMeals = new List<Meal>
+            try
             {
-                new Meal
+                var meals = await _databaseService.GetMealsAsync();
+                _meals.Clear();
+                foreach (var meal in meals)
                 {
-                    Name = "Breakfast",
-                    MealTime = DateTime.Today.AddHours(8),
-                    Notes = "Oatmeal with fruits",
-                    Location = "Home"
-                },
-                new Meal
-                {
-                    Name = "Lunch",
-                    MealTime = DateTime.Today.AddHours(12).AddMinutes(30),
-                    Notes = "Grilled chicken salad",
-                    Location = "Office"
+                    _meals.Add(meal);
                 }
-            };
-
-            foreach (var meal in sampleMeals)
-            {
-                _meals.Add(meal);
             }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error loading meals from database: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Refresh meals from database
+        /// </summary>
+        public async Task RefreshMealsAsync()
+        {
+            await LoadMealsFromDatabase();
+        }
+
+        /// <summary>
+        /// Get meals by category
+        /// </summary>
+        /// <param name="category">Category to filter by</param>
+        /// <returns>Filtered meals</returns>
+        public async Task<IEnumerable<Meal>> GetMealsByCategoryAsync(string category)
+        {
+            return await _databaseService.GetMealsByCategoryAsync(category);
+        }
+
+        /// <summary>
+        /// Search meals by name or notes
+        /// </summary>
+        /// <param name="searchTerm">Search term</param>
+        /// <returns>Matching meals</returns>
+        public async Task<IEnumerable<Meal>> SearchMealsAsync(string searchTerm)
+        {
+            return await _databaseService.SearchMealsAsync(searchTerm);
         }
     }
 }

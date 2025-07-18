@@ -17,6 +17,9 @@ namespace assignment_2425.Pages
             // Set default values
             datePicker.Date = DateTime.Today;
             timePicker.Time = DateTime.Now.TimeOfDay;
+
+            // Set default category based on time of day
+            SetDefaultCategory();
         }
 
         protected override void OnAppearing()
@@ -39,6 +42,7 @@ namespace assignment_2425.Pages
                 var meal = new Meal
                 {
                     Name = entryMealName.Text.Trim(),
+                    Category = pickerCategory.SelectedItem?.ToString() ?? "Other",
                     MealTime = datePicker.Date.Add(timePicker.Time),
                     Notes = editorNotes.Text?.Trim() ?? string.Empty,
                     Location = entryLocation.Text?.Trim() ?? string.Empty
@@ -148,6 +152,7 @@ namespace assignment_2425.Pages
         private bool ValidateForm()
         {
             bool isValid = true;
+            var errors = new List<string>();
 
             // Reset error states
             lblMealNameError.IsVisible = false;
@@ -156,13 +161,51 @@ namespace assignment_2425.Pages
             if (string.IsNullOrWhiteSpace(entryMealName.Text))
             {
                 lblMealNameError.IsVisible = true;
+                errors.Add("Meal name is required");
+                isValid = false;
+            }
+            else if (entryMealName.Text.Trim().Length < 2)
+            {
+                lblMealNameError.Text = "Meal name must be at least 2 characters";
+                lblMealNameError.IsVisible = true;
+                errors.Add("Meal name must be at least 2 characters");
+                isValid = false;
+            }
+            else if (entryMealName.Text.Trim().Length > 100)
+            {
+                lblMealNameError.Text = "Meal name must be less than 100 characters";
+                lblMealNameError.IsVisible = true;
+                errors.Add("Meal name must be less than 100 characters");
                 isValid = false;
             }
 
-            // Additional validation can be added here
+            // Validate category selection
+            if (pickerCategory.SelectedItem == null)
+            {
+                errors.Add("Please select a meal category");
+                isValid = false;
+            }
+
+            // Validate meal time (not in the future beyond today)
+            var selectedDateTime = datePicker.Date.Add(timePicker.Time);
+            if (selectedDateTime > DateTime.Now.AddHours(1)) // Allow 1 hour buffer
+            {
+                errors.Add("Meal time cannot be more than 1 hour in the future");
+                isValid = false;
+            }
+
+            // Validate notes length if provided
+            if (!string.IsNullOrWhiteSpace(editorNotes.Text) && editorNotes.Text.Length > 500)
+            {
+                errors.Add("Notes must be less than 500 characters");
+                isValid = false;
+            }
+
+            // Show validation errors
             if (!isValid)
             {
-                DisplayAlert("Validation Error", "Please correct the errors and try again.", "OK");
+                var errorMessage = "Please correct the following errors:\n\n" + string.Join("\n• ", errors);
+                DisplayAlert("Validation Error", errorMessage, "OK");
             }
 
             return isValid;
@@ -175,10 +218,25 @@ namespace assignment_2425.Pages
             timePicker.Time = DateTime.Now.TimeOfDay;
             editorNotes.Text = string.Empty;
             entryLocation.Text = string.Empty;
-            
+            SetDefaultCategory();
+
             // Reset error states
             lblMealNameError.IsVisible = false;
             frameSuccessMessage.IsVisible = false;
+        }
+
+        private void SetDefaultCategory()
+        {
+            var currentHour = DateTime.Now.Hour;
+
+            if (currentHour >= 5 && currentHour < 11)
+                pickerCategory.SelectedItem = "Breakfast";
+            else if (currentHour >= 11 && currentHour < 16)
+                pickerCategory.SelectedItem = "Lunch";
+            else if (currentHour >= 16 && currentHour < 22)
+                pickerCategory.SelectedItem = "Dinner";
+            else
+                pickerCategory.SelectedItem = "Snack";
         }
     }
 }

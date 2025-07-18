@@ -7,17 +7,53 @@
     <Grid RowDefinitions="Auto,*,Auto" Padding="20">
         
         <!-- Header -->
-        <VerticalStackLayout Grid.Row="0" Spacing="10" Margin="0,0,0,20">
+        <VerticalStackLayout Grid.Row="0" Spacing="15" Margin="0,0,0,20">
             <Label Text="Your Meals"
                    Style="{StaticResource Headline}"
                    HorizontalOptions="Center"
                    SemanticProperties.HeadingLevel="Level1" />
-            
+
             <Label x:Name="lblMealSummary"
                    Text="0 meals logged"
                    Style="{StaticResource SubHeadline}"
                    HorizontalOptions="Center"
                    TextColor="{StaticResource Gray600}" />
+
+            <!-- Search and Filter -->
+            <VerticalStackLayout Spacing="10">
+                <!-- Search Bar -->
+                <SearchBar x:Name="searchBar"
+                           Placeholder="Search meals..."
+                           FontSize="16"
+                           SearchCommand="{Binding SearchCommand}"
+                           SearchCommandParameter="{Binding Text, Source={x:Reference searchBar}}"
+                           TextChanged="OnSearchTextChanged"
+                           SemanticProperties.Hint="Search meals by name or notes" />
+
+                <!-- Category Filter -->
+                <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
+                    <Label Text="Filter:"
+                           FontSize="14"
+                           FontAttributes="Bold"
+                           VerticalOptions="Center"
+                           TextColor="{StaticResource Primary}" />
+
+                    <Picker x:Name="pickerCategoryFilter"
+                            FontSize="14"
+                            WidthRequest="120"
+                            SelectedIndexChanged="OnCategoryFilterChanged"
+                            SemanticProperties.Hint="Filter meals by category">
+                        <Picker.Items>
+                            <x:String>All</x:String>
+                            <x:String>Breakfast</x:String>
+                            <x:String>Lunch</x:String>
+                            <x:String>Dinner</x:String>
+                            <x:String>Snack</x:String>
+                            <x:String>Other</x:String>
+                        </Picker.Items>
+                    </Picker>
+                </HorizontalStackLayout>
+            </VerticalStackLayout>
         </VerticalStackLayout>
 
         <!-- Meals List -->

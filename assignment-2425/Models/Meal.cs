@@ -1,10 +1,12 @@
 using System.ComponentModel;
+using SQLite;
 
 namespace assignment_2425.Models
 {
     /// <summary>
     /// Represents a meal entry in the meal tracker app
     /// </summary>
+    [Table("Meals")]
     public class Meal : INotifyPropertyChanged
     {
         private string _id;
@@ -13,6 +15,7 @@ namespace assignment_2425.Models
         private string _notes;
         private string _imagePath;
         private string _location;
+        private string _category;
 
         public Meal()
         {
@@ -22,11 +25,13 @@ namespace assignment_2425.Models
             Notes = string.Empty;
             ImagePath = string.Empty;
             Location = string.Empty;
+            Category = "Meal";
         }
 
         /// <summary>
         /// Unique identifier for the meal
         /// </summary>
+        [PrimaryKey]
         public string Id
         {
             get => _id;
@@ -118,6 +123,22 @@ namespace assignment_2425.Models
                 {
                     _location = value;
                     OnPropertyChanged(nameof(Location));
+                }
+            }
+        }
+
+        /// <summary>
+        /// Category of the meal (Breakfast, Lunch, Dinner, Snack)
+        /// </summary>
+        public string Category
+        {
+            get => _category;
+            set
+            {
+                if (_category != value)
+                {
+                    _category = value;
+                    OnPropertyChanged(nameof(Category));
                 }
             }
         }

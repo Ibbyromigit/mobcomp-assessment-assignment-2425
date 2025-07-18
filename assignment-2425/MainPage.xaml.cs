@@ -14,20 +14,29 @@ namespace assignment_2425
             Console.WriteLine("🏠 MainPage loaded with meal service");
         }
 
-        protected override void OnAppearing()
+        protected override async void OnAppearing()
         {
             Console.WriteLine("👀 MainPage appearing...");
             base.OnAppearing();
-            UpdateMealCount();
+            await UpdateMealCountAsync();
             Console.WriteLine("📊 Meal count updated");
         }
 
-        private void UpdateMealCount()
+        private async Task UpdateMealCountAsync()
         {
-            var todaysMeals = _mealService.GetTodaysMeals().Count();
-            lblMealCount.Text = todaysMeals == 1
-                ? "1 meal logged today"
-                : $"{todaysMeals} meals logged today";
+            try
+            {
+                await _mealService.RefreshMealsAsync();
+                var todaysMeals = _mealService.GetTodaysMeals().Count();
+                lblMealCount.Text = todaysMeals == 1
+                    ? "1 meal logged today"
+                    : $"{todaysMeals} meals logged today";
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error updating meal count: {ex.Message}");
+                lblMealCount.Text = "Error loading meal count";
+            }
         }
 
         private async void OnAddMealClicked(object sender, EventArgs e)
