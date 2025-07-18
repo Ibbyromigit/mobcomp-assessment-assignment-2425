@@ -6,12 +6,14 @@ namespace assignment_2425.Pages
     public partial class AddMealPage : ContentPage
     {
         private readonly MealService _mealService;
+        private readonly LocationService _locationService;
 
         public AddMealPage()
         {
             InitializeComponent();
             _mealService = MealService.Instance;
-            
+            _locationService = LocationService.Instance;
+
             // Set default values
             datePicker.Date = DateTime.Today;
             timePicker.Time = DateTime.Now.TimeOfDay;
@@ -90,17 +92,57 @@ namespace assignment_2425.Pages
 
         private async void OnGetLocationClicked(object sender, EventArgs e)
         {
-            btnGetLocation.IsEnabled = false;
-            btnGetLocation.Text = "⏳";
+            try
+            {
+                // Disable button during operation
+                btnGetLocation.IsEnabled = false;
+                btnGetLocation.Text = "⏳";
 
-            // Simulate getting location
-            await Task.Delay(1000);
+                // Check location permission
+                bool hasPermission = await _locationService.CheckLocationPermissionAsync();
+                if (!hasPermission)
+                {
+                    await DisplayAlert("Permission Required", "Location permission is required to get your current location.", "OK");
+                    return;
+                }
 
-            entryLocation.Text = "Demo Location: University Campus";
-            await DisplayAlert("Location Demo", "Location functionality is available! In the full version, this would get your actual GPS coordinates.", "OK");
+                // Check if location services are available
+                bool isAvailable = await _locationService.IsLocationAvailableAsync();
+                if (!isAvailable)
+                {
+                    await DisplayAlert("Location Unavailable", "Location services are not available on this device or are disabled.", "OK");
+                    return;
+                }
 
-            btnGetLocation.IsEnabled = true;
-            btnGetLocation.Text = "📍";
+                // Get current location with address
+                var locationInfo = await _locationService.GetCurrentLocationWithAddressAsync();
+
+                if (locationInfo != null)
+                {
+                    // Update the location field with formatted address
+                    entryLocation.Text = locationInfo.FormattedAddress;
+
+                    await DisplayAlert("Location Found",
+                        $"Location captured successfully!\n\n" +
+                        $"Address: {locationInfo.FormattedAddress}\n" +
+                        $"Coordinates: {locationInfo.CoordinatesText}\n" +
+                        $"Accuracy: {locationInfo.Accuracy:F0}m", "OK");
+                }
+                else
+                {
+                    await DisplayAlert("Location Error", "Could not determine your current location. Please try again or enter location manually.", "OK");
+                }
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Error", $"Failed to get location: {ex.Message}", "OK");
+            }
+            finally
+            {
+                // Re-enable button
+                btnGetLocation.IsEnabled = true;
+                btnGetLocation.Text = "📍";
+            }
         }
 
         private bool ValidateForm()
