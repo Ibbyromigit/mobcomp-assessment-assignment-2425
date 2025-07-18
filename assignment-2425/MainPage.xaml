@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="assignment_2425.MainPage"
+             Title="Simple Meal Tracker">
+
+    <ScrollView>
+        <VerticalStackLayout
+            Padding="30,20"
+            Spacing="30">
+
+            <!-- App Header -->
+            <VerticalStackLayout Spacing="10">
+                <Image
+                    Source="dotnet_bot.png"
+                    HeightRequest="120"
+                    Aspect="AspectFit"
+                    SemanticProperties.Description="Meal tracker app logo" />
+
+                <Label
+                    Text="Simple Meal Tracker"
+                    Style="{StaticResource Headline}"
+                    HorizontalOptions="Center"
+                    SemanticProperties.HeadingLevel="Level1" />
+
+                <Label
+                    Text="Track your daily meals with ease"
+                    Style="{StaticResource SubHeadline}"
+                    HorizontalOptions="Center"
+                    SemanticProperties.HeadingLevel="Level2" />
+            </VerticalStackLayout>
+
+            <!-- Quick Stats -->
+            <Frame BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
+                   Padding="20"
+                   CornerRadius="10">
+                <VerticalStackLayout Spacing="5">
+                    <Label x:Name="lblMealCount"
+                           Text="0 meals logged today"
+                           FontSize="18"
+                           FontAttributes="Bold"
+                           TextColor="White"
+                           HorizontalOptions="Center" />
+                    <Label Text="Keep up the good work!"
+                           FontSize="14"
+                           TextColor="White"
+                           HorizontalOptions="Center" />
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Navigation Buttons -->
+            <VerticalStackLayout Spacing="15">
+                <Button x:Name="btnAddMeal"
+                        Text="📝 Add New Meal"
+                        FontSize="18"
+                        BackgroundColor="{StaticResource Primary}"
+                        TextColor="White"
+                        HeightRequest="60"
+                        CornerRadius="10"
+                        Clicked="OnAddMealClicked"
+                        SemanticProperties.Hint="Navigate to add a new meal" />
+
+                <Button x:Name="btnViewMeals"
+                        Text="📋 View All Meals"
+                        FontSize="18"
+                        BackgroundColor="{StaticResource Secondary}"
+                        TextColor="White"
+                        HeightRequest="60"
+                        CornerRadius="10"
+                        Clicked="OnViewMealsClicked"
+                        SemanticProperties.Hint="Navigate to view all logged meals" />
+
+                <Button x:Name="btnTakePhoto"
+                        Text="📷 Take Meal Photo"
+                        FontSize="18"
+                        BackgroundColor="{StaticResource Tertiary}"
+                        TextColor="White"
+                        HeightRequest="60"
+                        CornerRadius="10"
+                        Clicked="OnTakePhotoClicked"
+                        SemanticProperties.Hint="Open camera to take a photo of your meal" />
+            </VerticalStackLayout>
+
+            <!-- Footer -->
+            <Label Text="Mobile Computing Assignment 2024/25"
+                   FontSize="12"
+                   TextColor="{StaticResource Gray600}"
+                   HorizontalOptions="Center"
+                   Margin="0,20,0,0" />
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

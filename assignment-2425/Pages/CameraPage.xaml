@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="assignment_2425.Pages.CameraPage"
+             Title="Camera">
+
+    <Grid RowDefinitions="Auto,*,Auto" Padding="20">
+        
+        <!-- Header -->
+        <VerticalStackLayout Grid.Row="0" Spacing="10" Margin="0,0,0,20">
+            <Label Text="Meal Camera"
+                   Style="{StaticResource Headline}"
+                   HorizontalOptions="Center"
+                   SemanticProperties.HeadingLevel="Level1" />
+            
+            <Label Text="Take a photo of your meal"
+                   Style="{StaticResource SubHeadline}"
+                   HorizontalOptions="Center"
+                   TextColor="{StaticResource Gray600}" />
+        </VerticalStackLayout>
+
+        <!-- Camera/Photo Display Area -->
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Spacing="20">
+                
+                <!-- Photo Display -->
+                <Frame x:Name="framePhotoDisplay"
+                       BackgroundColor="{StaticResource Gray100}"
+                       BorderColor="{StaticResource Gray300}"
+                       CornerRadius="10"
+                       Padding="20"
+                       HeightRequest="300"
+                       IsVisible="False">
+                    <Image x:Name="imgCapturedPhoto"
+                           Aspect="AspectFit"
+                           SemanticProperties.Description="Captured meal photo" />
+                </Frame>
+
+                <!-- Camera Placeholder -->
+                <Frame x:Name="frameCameraPlaceholder"
+                       BackgroundColor="{StaticResource Gray100}"
+                       BorderColor="{StaticResource Gray300}"
+                       CornerRadius="10"
+                       Padding="40"
+                       HeightRequest="300"
+                       IsVisible="True">
+                    <VerticalStackLayout Spacing="15" 
+                                       VerticalOptions="CenterAndExpand"
+                                       HorizontalOptions="CenterAndExpand">
+                        <Label Text="📷"
+                               FontSize="60"
+                               HorizontalOptions="Center" />
+                        <Label Text="No photo taken yet"
+                               FontSize="16"
+                               FontAttributes="Bold"
+                               HorizontalOptions="Center"
+                               TextColor="{StaticResource Gray600}" />
+                        <Label Text="Tap the camera button below to take a photo"
+                               FontSize="14"
+                               HorizontalOptions="Center"
+                               TextColor="{StaticResource Gray500}"
+                               HorizontalTextAlignment="Center" />
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Photo Info -->
+                <VerticalStackLayout x:Name="layoutPhotoInfo" 
+                                   Spacing="10" 
+                                   IsVisible="False">
+                    <Label Text="Photo Details"
+                           FontSize="16"
+                           FontAttributes="Bold"
+                           TextColor="{StaticResource Primary}" />
+                    
+                    <Label x:Name="lblPhotoPath"
+                           Text="Path: "
+                           FontSize="12"
+                           TextColor="{StaticResource Gray600}"
+                           LineBreakMode="TailTruncation" />
+                    
+                    <Label x:Name="lblPhotoSize"
+                           Text="Size: "
+                           FontSize="12"
+                           TextColor="{StaticResource Gray600}" />
+                    
+                    <Label x:Name="lblPhotoTimestamp"
+                           Text="Taken: "
+                           FontSize="12"
+                           TextColor="{StaticResource Gray600}" />
+                </VerticalStackLayout>
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- Action Buttons -->
+        <VerticalStackLayout Grid.Row="2" Spacing="15" Margin="0,20,0,0">
+            
+            <!-- Camera Actions -->
+            <HorizontalStackLayout Spacing="15" HorizontalOptions="Center">
+                <Button x:Name="btnTakePhoto"
+                        Text="📷 Take Photo"
+                        FontSize="16"
+                        BackgroundColor="{StaticResource Primary}"
+                        TextColor="White"
+                        WidthRequest="150"
+                        HeightRequest="50"
+                        CornerRadius="10"
+                        Clicked="OnTakePhotoClicked"
+                        SemanticProperties.Hint="Take a photo using the camera" />
+
+                <Button x:Name="btnSelectPhoto"
+                        Text="🖼️ Gallery"
+                        FontSize="16"
+                        BackgroundColor="{StaticResource Secondary}"
+                        TextColor="White"
+                        WidthRequest="150"
+                        HeightRequest="50"
+                        CornerRadius="10"
+                        Clicked="OnSelectPhotoClicked"
+                        SemanticProperties.Hint="Select a photo from gallery" />
+            </HorizontalStackLayout>
+
+            <!-- Photo Management -->
+            <HorizontalStackLayout x:Name="layoutPhotoActions" 
+                                 Spacing="15" 
+                                 HorizontalOptions="Center"
+                                 IsVisible="False">
+                <Button x:Name="btnSavePhoto"
+                        Text="💾 Save"
+                        FontSize="16"
+                        BackgroundColor="{StaticResource Tertiary}"
+                        TextColor="White"
+                        WidthRequest="100"
+                        HeightRequest="50"
+                        CornerRadius="10"
+                        Clicked="OnSavePhotoClicked"
+                        SemanticProperties.Hint="Save the photo" />
+
+                <Button x:Name="btnRetakePhoto"
+                        Text="🔄 Retake"
+                        FontSize="16"
+                        BackgroundColor="{StaticResource Gray400}"
+                        TextColor="White"
+                        WidthRequest="100"
+                        HeightRequest="50"
+                        CornerRadius="10"
+                        Clicked="OnRetakePhotoClicked"
+                        SemanticProperties.Hint="Retake the photo" />
+
+                <Button x:Name="btnDeletePhoto"
+                        Text="🗑️ Delete"
+                        FontSize="16"
+                        BackgroundColor="Red"
+                        TextColor="White"
+                        WidthRequest="100"
+                        HeightRequest="50"
+                        CornerRadius="10"
+                        Clicked="OnDeletePhotoClicked"
+                        SemanticProperties.Hint="Delete the photo" />
+            </HorizontalStackLayout>
+
+            <!-- Navigation -->
+            <Button x:Name="btnBackToHome"
+                    Text="🏠 Back to Home"
+                    FontSize="16"
+                    BackgroundColor="{StaticResource Gray300}"
+                    TextColor="{StaticResource Gray900}"
+                    HeightRequest="50"
+                    CornerRadius="10"
+                    Clicked="OnBackToHomeClicked"
+                    SemanticProperties.Hint="Return to home page" />
+
+        </VerticalStackLayout>
+
+    </Grid>
+
+</ContentPage>

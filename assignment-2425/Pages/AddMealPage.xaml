@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:system="clr-namespace:System;assembly=netstandard"
+             x:Class="assignment_2425.Pages.AddMealPage"
+             Title="Add New Meal">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="30,20" Spacing="20">
+            
+            <!-- Page Header -->
+            <Label Text="Add New Meal"
+                   Style="{StaticResource Headline}"
+                   HorizontalOptions="Center"
+                   SemanticProperties.HeadingLevel="Level1" />
+            
+            <Label Text="Fill in the details below to log your meal"
+                   Style="{StaticResource SubHeadline}"
+                   HorizontalOptions="Center"
+                   TextColor="{StaticResource Gray600}" />
+
+            <!-- Form Fields -->
+            <VerticalStackLayout Spacing="15">
+                
+                <!-- Meal Name -->
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="Meal Name *"
+                           FontAttributes="Bold"
+                           TextColor="{StaticResource Primary}" />
+                    <Entry x:Name="entryMealName"
+                           Placeholder="e.g., Breakfast, Lunch, Dinner"
+                           FontSize="16"
+                           SemanticProperties.Hint="Enter the name of your meal" />
+                    <Label x:Name="lblMealNameError"
+                           Text="Meal name is required"
+                           TextColor="Red"
+                           FontSize="12"
+                           IsVisible="False" />
+                </VerticalStackLayout>
+
+                <!-- Meal Time -->
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="Meal Time"
+                           FontAttributes="Bold"
+                           TextColor="{StaticResource Primary}" />
+                    <HorizontalStackLayout Spacing="10">
+                        <DatePicker x:Name="datePicker"
+                                   FontSize="16"
+                                   HorizontalOptions="FillAndExpand"
+                                   SemanticProperties.Hint="Select the date of your meal" />
+                        <TimePicker x:Name="timePicker"
+                                   FontSize="16"
+                                   HorizontalOptions="FillAndExpand"
+                                   SemanticProperties.Hint="Select the time of your meal" />
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+
+                <!-- Notes -->
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="Notes (Optional)"
+                           FontAttributes="Bold"
+                           TextColor="{StaticResource Primary}" />
+                    <Editor x:Name="editorNotes"
+                           Placeholder="Add any notes about your meal..."
+                           HeightRequest="100"
+                           FontSize="16"
+                           SemanticProperties.Hint="Enter optional notes about your meal" />
+                </VerticalStackLayout>
+
+                <!-- Location -->
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="Location (Optional)"
+                           FontAttributes="Bold"
+                           TextColor="{StaticResource Primary}" />
+                    <HorizontalStackLayout Spacing="10">
+                        <Entry x:Name="entryLocation"
+                               Placeholder="e.g., Home, Office, Restaurant"
+                               FontSize="16"
+                               HorizontalOptions="FillAndExpand"
+                               SemanticProperties.Hint="Enter the location where you had your meal" />
+                        <Button x:Name="btnGetLocation"
+                                Text="📍"
+                                FontSize="18"
+                                WidthRequest="50"
+                                HeightRequest="50"
+                                CornerRadius="25"
+                                BackgroundColor="{StaticResource Secondary}"
+                                TextColor="White"
+                                Clicked="OnGetLocationClicked"
+                                SemanticProperties.Hint="Get current location" />
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+
+            </VerticalStackLayout>
+
+            <!-- Action Buttons -->
+            <VerticalStackLayout Spacing="15" Margin="0,30,0,0">
+                <Button x:Name="btnSaveMeal"
+                        Text="💾 Save Meal"
+                        FontSize="18"
+                        BackgroundColor="{StaticResource Primary}"
+                        TextColor="White"
+                        HeightRequest="60"
+                        CornerRadius="10"
+                        Clicked="OnSaveMealClicked"
+                        SemanticProperties.Hint="Save the meal to your log" />
+
+                <Button x:Name="btnCancel"
+                        Text="❌ Cancel"
+                        FontSize="18"
+                        BackgroundColor="{StaticResource Gray300}"
+                        TextColor="{StaticResource Gray900}"
+                        HeightRequest="60"
+                        CornerRadius="10"
+                        Clicked="OnCancelClicked"
+                        SemanticProperties.Hint="Cancel and return to home page" />
+            </VerticalStackLayout>
+
+            <!-- Success Message -->
+            <Frame x:Name="frameSuccessMessage"
+                   BackgroundColor="LightGreen"
+                   Padding="15"
+                   CornerRadius="10"
+                   IsVisible="False">
+                <Label Text="✅ Meal saved successfully!"
+                       FontSize="16"
+                       FontAttributes="Bold"
+                       TextColor="DarkGreen"
+                       HorizontalOptions="Center" />
+            </Frame>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

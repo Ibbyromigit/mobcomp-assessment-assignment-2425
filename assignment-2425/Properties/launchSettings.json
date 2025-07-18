@@ -1,0 +1,19 @@
+{
+  "profiles": {
+    "Windows Machine": {
+      "commandName": "Project",
+      "nativeDebugging": false
+    },
+    "Windows (Unpackaged)": {
+      "commandName": "Project",
+      "nativeDebugging": false,
+      "environmentVariables": {
+        "DOTNET_MODIFIABLE_ASSEMBLIES": "debug"
+      }
+    },
+    "Windows (Packaged)": {
+      "commandName": "MsixPackage",
+      "nativeDebugging": false
+    }
+  }
+}

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="assignment_2425.Pages.ViewMealsPage"
+             Title="View Meals">
+
+    <Grid RowDefinitions="Auto,*,Auto" Padding="20">
+        
+        <!-- Header -->
+        <VerticalStackLayout Grid.Row="0" Spacing="10" Margin="0,0,0,20">
+            <Label Text="Your Meals"
+                   Style="{StaticResource Headline}"
+                   HorizontalOptions="Center"
+                   SemanticProperties.HeadingLevel="Level1" />
+            
+            <Label x:Name="lblMealSummary"
+                   Text="0 meals logged"
+                   Style="{StaticResource SubHeadline}"
+                   HorizontalOptions="Center"
+                   TextColor="{StaticResource Gray600}" />
+        </VerticalStackLayout>
+
+        <!-- Meals List -->
+        <ScrollView Grid.Row="1">
+            <StackLayout x:Name="stackMealsList" Spacing="10">
+                
+                <!-- Empty State -->
+                <VerticalStackLayout x:Name="emptyStateLayout" 
+                                   Spacing="20" 
+                                   IsVisible="True"
+                                   VerticalOptions="CenterAndExpand"
+                                   HorizontalOptions="CenterAndExpand">
+                    <Label Text="🍽️"
+                           FontSize="60"
+                           HorizontalOptions="Center" />
+                    <Label Text="No meals logged yet"
+                           FontSize="18"
+                           FontAttributes="Bold"
+                           HorizontalOptions="Center"
+                           TextColor="{StaticResource Gray600}" />
+                    <Label Text="Start by adding your first meal!"
+                           FontSize="14"
+                           HorizontalOptions="Center"
+                           TextColor="{StaticResource Gray500}" />
+                    <Button Text="Add First Meal"
+                            BackgroundColor="{StaticResource Primary}"
+                            TextColor="White"
+                            CornerRadius="10"
+                            Clicked="OnAddFirstMealClicked"
+                            SemanticProperties.Hint="Navigate to add your first meal" />
+                </VerticalStackLayout>
+
+                <!-- Meals will be dynamically added here -->
+                
+            </StackLayout>
+        </ScrollView>
+
+        <!-- Action Buttons -->
+        <VerticalStackLayout Grid.Row="2" Spacing="10" Margin="0,20,0,0">
+            <Button x:Name="btnRefresh"
+                    Text="🔄 Refresh"
+                    FontSize="16"
+                    BackgroundColor="{StaticResource Secondary}"
+                    TextColor="White"
+                    HeightRequest="50"
+                    CornerRadius="10"
+                    Clicked="OnRefreshClicked"
+                    SemanticProperties.Hint="Refresh the meals list" />
+            
+            <Button x:Name="btnAddNewMeal"
+                    Text="➕ Add New Meal"
+                    FontSize="16"
+                    BackgroundColor="{StaticResource Primary}"
+                    TextColor="White"
+                    HeightRequest="50"
+                    CornerRadius="10"
+                    Clicked="OnAddNewMealClicked"
+                    SemanticProperties.Hint="Navigate to add a new meal" />
+        </VerticalStackLayout>
+
+    </Grid>
+
+</ContentPage>

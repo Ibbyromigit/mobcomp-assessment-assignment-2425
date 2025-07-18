@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="assignment_2425.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:assignment_2425"
+    xmlns:pages="clr-namespace:assignment_2425.Pages"
+    Shell.FlyoutBehavior="Disabled"
+    Title="Simple Meal Tracker">
+
+    <TabBar>
+        <ShellContent
+            Title="Home"
+            Icon="home.png"
+            ContentTemplate="{DataTemplate local:MainPage}"
+            Route="MainPage" />
+
+        <ShellContent
+            Title="Add Meal"
+            Icon="add.png"
+            ContentTemplate="{DataTemplate pages:AddMealPage}"
+            Route="AddMealPage" />
+
+        <ShellContent
+            Title="View Meals"
+            Icon="list.png"
+            ContentTemplate="{DataTemplate pages:ViewMealsPage}"
+            Route="ViewMealsPage" />
+
+        <ShellContent
+            Title="Camera"
+            Icon="camera.png"
+            ContentTemplate="{DataTemplate pages:CameraPage}"
+            Route="CameraPage" />
+    </TabBar>
+
+</Shell>
